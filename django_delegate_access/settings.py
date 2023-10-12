@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'rest_framework',
+    'delegation.apps.DelegationConfig',
+    'test_app.apps.TestAppConfig',
 ]
 
 MIDDLEWARE = [
@@ -121,3 +124,20 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Test Delegation Settings
+DELEGATION_PERMISSION_CLASSES = ("rest_framework.permissions.IsAuthenticated",)  # Permissions required to delegate
+ENFORCE_DELEGATION = True  # Whether expiration on delegations is enforced
+DEFAULT_DELEGATION_DAYS = 7  # Default number of days before a delegation expires
+MAX_DELEGATION_DAYS = 14  # Maximum number of days allowed for a delegation
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'delegation.authentication.DelegationTokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
